@@ -1,0 +1,23 @@
+.head{
+    margin-top: 20px;
+}
+
+.input{
+    width: 200px;
+    height: 15px;
+    padding: 5px;
+    margin: 10px;
+}
+
+.main{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px,1fr));
+    gap: 20px;
+}
+
+
+.main-Contenedor{
+    border: 1px solid white;
+    text-align: center;
+}
+
