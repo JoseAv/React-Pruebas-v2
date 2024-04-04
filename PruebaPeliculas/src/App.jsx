@@ -1,51 +1,75 @@
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import { useRef, useState } from 'react'
-import {useMovies} from './components/movies'
+import {RenderMovie} from './components/renderMovie'
+import {useMovies} from './hooks/useMovies'
+
+function useValidateSearch(){
+
+const [Search, setSearch]= useState('')
+const [error,setError] = useState('')
+const firsInput = useRef(true)
+
+  useEffect(()=>{
+
+    if(firsInput.current){
+      firsInput.current = Search === '' // Search === '' devolvera true o false es una comparacion
+      return
+    }
+  
+    if(Search === ''){
+      setError('Debe de Ingresar un caracter')
+      return 
+    }
+  
+    if(Search.length < 3){
+      setError('Ingrese mas de 3 caracteres')
+      return 
+    }
+  
+    setError('')
+  
+    
+
+  },[Search])
+
+  return {Search,setSearch,error}
+}
 
 
 function App() {
-  const [value,setValue]= useState()
-  
-  let input = useRef()
-  let movie =  useMovies(value)
+const {Search,setSearch,error} = useValidateSearch()
+const {movies}= useMovies()
 
-  
 
-  function handlesubmit(e){
+function handleSubmit(e){
     e.preventDefault()
-    const {input} = Object.fromEntries(new window.FormData(e.target))
-    setValue(input)
-  }
+}
 
-  async function handlechange(e){
-    input.current = e.target.value
-    setValue(input.current)
-  }
+function handleChange(e){
+  const datos = e.target.value
+  setSearch(datos)
+
+}
+
+
 
 
   return (
     <>
     
-    <header className='head'>
     <h1>Peliculas</h1>
-      <form onSubmit={handlesubmit}>
-        <input type="text" name='input' className='input'  ref={input} onChange={handlechange} />
-        <button   className='botom' type='submit' >Buscar</button>
-      </form>
-    </header>
+    <form onSubmit={handleSubmit} >
+      <input name='datos' type="text"  value={Search} onChange={handleChange} />
+      <button>Buscar</button>
+    </form>
+    {error ? <p style={{color:'red'}}>{error}</p>: '' }
 
-    <main className='main'>
-    { movie && movie.map(e => {
-      return(
-          <div className='main-Contenedor' key={e.imdbID}>
-            <h3>{e.Title}</h3>
-            <h4>{e.Year}</h4>
-            <img src={e.Poster} alt="Aqui va una Pelicula llamada de la Api" />
-            </div>
-            )
-      })}
+
+    <main>
+    {
+      <RenderMovie movies={movies}/>
+    }
     </main>
-
 
     </>
   )
