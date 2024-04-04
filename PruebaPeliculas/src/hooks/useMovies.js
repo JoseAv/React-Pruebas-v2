@@ -1,7 +1,10 @@
-import datos from '../json/prueba.json'
+import { useState,useRef } from 'react'
+export function useMovies({Search}){
 
-export function useMovies(){
-const movies = datos.Search
+const [movies,setMovies] = useState([])
+const inputRef = useRef({Search})
+
+
 console.log(movies)
 const mapmovies = movies?.map(e => ({
     id: e.imdbID,
@@ -12,7 +15,17 @@ const mapmovies = movies?.map(e => ({
 
 }))    
 
+function getMovies(){
+    if(Search === inputRef.current) return
+    
+    
+    console.log('entra aqui')
+        fetch(`http://www.omdbapi.com/?apikey=4287ad07&s=${Search}`)
+        .then(res => res.json())
+        .then(data => setMovies(data.Search))
+}
 
-return {movies:mapmovies}
+
+return {movies:mapmovies,getMovies}
 
 }

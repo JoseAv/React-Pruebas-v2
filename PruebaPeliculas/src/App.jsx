@@ -38,11 +38,13 @@ const firsInput = useRef(true)
 
 function App() {
 const {Search,setSearch,error} = useValidateSearch()
-const {movies}= useMovies()
+const {movies,getMovies}= useMovies({Search})
+
 
 
 function handleSubmit(e){
     e.preventDefault()
+    getMovies()
 }
 
 function handleChange(e){
