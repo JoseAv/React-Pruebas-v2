@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import {RenderMovie} from './components/renderMovie'
 import {useMovies} from './hooks/useMovies'
+import debounce from 'just-debounce-it'
 
 function useValidateSearch(){
 
@@ -38,30 +39,44 @@ const firsInput = useRef(true)
 
 function App() {
 const {Search,setSearch,error} = useValidateSearch()
-const {movies,getMovies}= useMovies({Search})
+const [checkYear, setYear] = useState(false)
+const {movies,getMovies}= useMovies({Search,checkYear})
 
+
+const getRetarMovies= useCallback(
+
+  debounce(Search => {
+    console.log('Search',Search)
+    getMovies({Search})
+},2000)
+
+, [getMovies]
+)
 
 
 function handleSubmit(e){
     e.preventDefault()
-    getMovies()
+    getMovies({Search})
 }
 
 function handleChange(e){
-  const datos = e.target.value
-  setSearch(datos)
+  console.log(e.target.value)
+  const newSearch = e.target.value
+  if (newSearch.startsWith(' ')) return
+    setSearch(newSearch)
+  getRetarMovies(newSearch)
 
 }
-
 
 
 
   return (
-    <>
+    <div className='container'>
     
     <h1>Peliculas</h1>
     <form onSubmit={handleSubmit} >
       <input name='datos' type="text"  value={Search} onChange={handleChange} />
+      <input type="checkbox" name='peliculas' onChange={()=> setYear(!checkYear)} />
       <button>Buscar</button>
     </form>
     {error ? <p style={{color:'red'}}>{error}</p>: '' }
@@ -73,7 +88,7 @@ function handleChange(e){
     }
     </main>
 
-    </>
+    </div>
   )
 }
 

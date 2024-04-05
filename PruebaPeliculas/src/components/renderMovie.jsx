@@ -4,7 +4,7 @@ function ResultMovie(movies){
     <div className="grid">
     {movies.movies.map(e=> (
         <div key={e.id} className="divs">
-          <h1>{e.title}</h1>
+          <h3>{e.title}</h3>
           <p>{e.year}</p>
           <img src={e.poster} alt="Imagen de busqueda de peliculas API" />
         </div>

@@ -1,31 +1,40 @@
-import { useState,useRef } from 'react'
-export function useMovies({Search}){
+import { useState,useRef, useMemo, useCallback } from 'react'
+import {fetchMovies} from  '../services/movies'
 
+
+export function useMovies({Search,checkYear}){
 const [movies,setMovies] = useState([])
-const inputRef = useRef({Search})
+const [loading,setloading]= useState(false)
+const [error, seterror] = useState(null)
+const inputRef = useRef({Search}) // <-- No se vuelve a Renderizar los hooks de react
 
-
-console.log(movies)
-const mapmovies = movies?.map(e => ({
-    id: e.imdbID,
-    title: e.Title,
-    year : e.Year,
-    poster : e.Poster,
-    type: e.Type
-
-}))    
-
-function getMovies(){
-    if(Search === inputRef.current) return
+   
     
+     const getMovies=useCallback(({Search})=> { //Solo en funcion Flecha
+        if(Search === inputRef.current) return
+
+        try{
+        setloading(true)
+        seterror(null)
+        inputRef.current = Search
+        fetchMovies({Search}).then(data => setMovies(data))
+    } catch(e) {
+        seterror(e)
+    } finally{
+        setloading(false)
+    }
     
-    console.log('entra aqui')
-        fetch(`http://www.omdbapi.com/?apikey=4287ad07&s=${Search}`)
-        .then(res => res.json())
-        .then(data => setMovies(data.Search))
-}
+    },[])
 
+    
+const filterData = useMemo(()=> {
+    return checkYear ?
+    [...movies].sort((a,b)=> a.year - b.year) :
+    movies
 
-return {movies:mapmovies,getMovies}
+},[checkYear,movies])
+   
+
+return {movies:filterData,getMovies,loading,error}
 
 }

@@ -20,7 +20,9 @@ Requirimientos:
 
 Primera Iteracion:
 
-- Evitar que se haga la misma busqueda dos veces seguidas.
+- ✅ Evitar que se haga la misma busqueda dos veces seguidas.
+
+- Ordenar Peliculas por año
 
 - Haz que la busqueda se haga automaticamente al escribir.
 
