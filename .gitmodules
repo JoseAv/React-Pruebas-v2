@@ -1,0 +1,3 @@
+[submodule "PruebaTecnica"]
+    path = PruebaTecnica
+    url = https://github.com/JoseAv/React-Pruebas-v2
