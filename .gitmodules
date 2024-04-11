@@ -6,3 +6,7 @@
 [submodule "PruebaTecnica"]
     path = PruebaTecnica
     url = https://github.com/JoseAv/PruebaTecnica
+
+[submodule "Prueba-SemiSr-React"]
+    path = Prueba-SemiSr-React
+    url = https://github.com/JoseAv/Prueba-SemiSr-React
