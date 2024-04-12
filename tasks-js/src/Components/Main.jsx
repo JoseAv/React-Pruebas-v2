@@ -1,24 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import PropTypes from 'prop-types';
-export const Main=({products,handleDeleteCompleted,handleDelete,CompleteInput,handleCompleteAll,ShowAllProducts,ShowPendingProducts,ShowCompletedProducts})=> {
-const productsNoEmpty = products.length > 0
+import {ShowAll} from './showTaskAll'
+import {ShowFilters} from './taskFilters'
+export const Main=({filters,products,filTask,handleDeleteCompleted,handleDelete,CompleteInput,handleCompleteAll,ShowAllProducts,ShowPendingProducts,ShowCompletedProducts})=> {
+
 
 
     return(
         <div className='container'>
-        <div>
-        {productsNoEmpty ?   products.map(tsk => (
-                <div key={tsk.id} className="container-task">
-                        <input type="checkbox" className="form-check-input" onChange={()=> CompleteInput(tsk)} checked={tsk.completed}/>
-                        <h2 style={{textDecoration: tsk.completed ? 'line-through' : 'none'}} >{tsk.title}</h2>
-                        <button className="btn btn-danger" onClick={()=>{handleDelete({tsk})}}>x</button>
-                        
-                </div>
-
-
-        )):  <h2>Sin Tareas Aun</h2> }
-        </div>
-
+            {filters === 'all'? <ShowAll products={products} handleDelete={handleDelete} CompleteInput={CompleteInput}/> 
+            :  <ShowFilters filTask={filTask} handleDelete={handleDelete} CompleteInput={CompleteInput}/> }
+            
+           
             <div className='listBotom'><button onClick={()=> handleCompleteAll()}>Completar Todos</button>
                 <button onClick={ShowCompletedProducts}>Mostrar Completados</button>
                 <button onClick={ShowPendingProducts}>Mostrar Sin Completar</button>
@@ -35,6 +28,8 @@ const productsNoEmpty = products.length > 0
 
 Main.propTypes = {
     products: PropTypes.array.isRequired,
+    filTask:PropTypes.array,
+    filters:PropTypes.any,
     handleDelete: PropTypes.func.isRequired,
     CompleteInput: PropTypes.func.isRequired,
     handleCompleteAll: PropTypes.func.isRequired,
