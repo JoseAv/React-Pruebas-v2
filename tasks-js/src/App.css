@@ -22,6 +22,12 @@
 .container{
     display: flex;
     margin-top: 30px;
-    flex-direction: column;
     gap: 30px;
+    flex-direction: row-reverse;
+}
+
+.listBotom{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
